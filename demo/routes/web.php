@@ -16,3 +16,12 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+Route::get('/events', function(){
+    return view('events.index');
+});
+
+Route::get('/events/{id}','EventsController@edit');
+
+
+
