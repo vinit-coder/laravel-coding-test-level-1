@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Str;
+use DataTables;
 class EventsController extends Controller
 {
     /**
@@ -18,6 +20,31 @@ class EventsController extends Controller
     {
         // $events = Event::paginate();
         // return view('events.index',['data'=>$events]);
+
+        if (request()->ajax()) {
+            
+            $data = Event::latest()->get();
+            return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+                        //dd($row->id);
+
+                           $btn = '<div class="row lm-15" width="100%"><a href="'.route('edit.event',$row->id).'" class="edit-event btn btn-primary btn-sm col-4">Edit</a>'
+                                .'<form class= "col-1" action="'.route('delete.event',$row->id).'" method="post">'
+                                  
+                                    .'<input type="hidden" name="_method" value="DELETE">'
+                                    .'<button  type="submit"  class="delete-event btn btn-primary btn-sm" data-id = "'.$row->id.'">Delete</button>'
+                                    .'</form></div>';
+     
+                            return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+
+
+        return view('events.index');
+      
     }
 
     /**
@@ -41,7 +68,7 @@ class EventsController extends Controller
     {
         $validator = Validator::make(request()->all(), [
             'name'=>'required|string',
-            'slug'=>'string|unique:events',
+            'slug'=>'unique:events',
             'startAt'=>'required|date',
             'endAt'=>'required|date'
         ]);
@@ -52,6 +79,7 @@ class EventsController extends Controller
                 ];
         }
         
+        $validatedData = $request->all();
         if(!$request->slug)
         {
             $validatedData['slug'] = Str::slug($request->name);
@@ -66,6 +94,7 @@ class EventsController extends Controller
         $validatedData['id']= Str::uuid();
         $event=   Event::create($validatedData);
 
+       
         if($event)
         {
             Session::flash('message', 'Event Created Successfully'); 
@@ -75,8 +104,7 @@ class EventsController extends Controller
             Session::flash('message', 'Something Went Wrong'); 
             Session::flash('alert-class', 'alert-danger'); 
         }
-         redirect('/events');
-
+        return redirect('/events/create');
     }
 
     /**
@@ -110,11 +138,11 @@ class EventsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $validator = Validator::make(request()->all(), [
             'name'=>'required|string',
-            'slug'=>'string|unique:events',
+            'slug'=>'string',
             'startAt'=>'required|date',
             'endAt'=>'required|date'
         ]);
@@ -124,7 +152,7 @@ class EventsController extends Controller
                     'errors'=>$validator->messages()
                 ];
         }
-        
+        $validatedData = $request->all(); 
         if(!$request->slug)
         {
             $validatedData['slug'] = Str::slug($request->name);
@@ -136,7 +164,7 @@ class EventsController extends Controller
             $validatedData['slug'] = $validatedData['slug'].$count; 
         }
 
-        $event = Event::find($id);
+        $event = Event::find($request->id);
 
         $event=   $event->update($validatedData);
 
@@ -149,7 +177,7 @@ class EventsController extends Controller
             Session::flash('message', 'Something Went Wrong'); 
             Session::flash('alert-class', 'alert-danger'); 
         }
-         redirect('/events');
+         return redirect('/');
 
     }
 
@@ -168,7 +196,7 @@ class EventsController extends Controller
             Session::flash('message', 'Event Deleted'); 
             Session::flash('alert-class', 'alert-success'); 
     
-         redirect('/events');
+        return  redirect('/events');
 
     }
 }

@@ -12,16 +12,17 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
+Route::get('/home', 'EventsController@index')->name('home');
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-Route::get('/events', function(){
+Route::get('/', function () {
     return view('events.index');
-});
+ })->middleware('auth');
 
-Route::get('/events/{id}','EventsController@edit');
-
-
-
+Route::get('/events', 'EventsController@index')->name('index.events');
+Route::get('/events/create','EventsController@create')->name('create.event');
+Route::post('/events/store','EventsController@store')->name('store.event');
+Route::put('/events/update','EventsController@update')->name('update.event');
+Route::get('/events/{id}/edit','EventsController@edit')->name('edit.event');
+Route::get('/events/{id}','EventsController@show')->name('show.event');
+Route::delete('/events/{id}','EventsController@destroy')->name('delete.event');

@@ -1,37 +1,26 @@
-
 @extends('layouts.app')
 
 @section('content')
 <div class="container mt-30">
     <div class="row" >
     <h1>Edit Event Details</h1>
-<form class="was-validated" action="{{route('update.event', $event->id)}}" method="POST"> 
+<form class="was-validated" action="{{route('store.event')}}" method="POST">
+
   @csrf
-  @method('PUT')
-    @if(isset($event))
     
-    <input type="hidden" value="{{$event->id}}" name="id">
-    @endif
+    <input type="hidden"  name="id">
+ 
   <div class="mb-3">
     <label for="validationText" class="form-label">Event Name</label>
-    <input  type ="text" class="form-control " id="event_name" name= "name" value="{{$event->name}}" placeholder="required name" required/>
+    <input  type ="text" class="form-control " id="event_name" name= "name"  placeholder="required name" required/>
     <div class="invalid-feedback">
       Please Enter Event Name.
     </div>
   </div>
-
-  @php
-$startAt = new DateTime($event->startAt);
-$startAt = $startAt->format('Y-m-d\TH:i:s');
-$endAt = new DateTime($event->endAt);
-$endAt= $endAt->format('Y-m-d\TH:i:s');
-
- @endphp
-
  
   <div class="mb-3">
     <label for="validationText" class="form-label">Event Start At</label>
-    <input  type ="datetime-local" class="form-control " id="start_at" value="{{$startAt}}"  name="startAt" placeholder="required Date-Time" required/>
+    <input  type ="datetime-local" class="form-control " id="start_at" value=""  name="startAt" placeholder="required Date-Time" required/>
     <div class="invalid-feedback">
       Please Enter Event start DateTime.
     </div>
@@ -39,15 +28,15 @@ $endAt= $endAt->format('Y-m-d\TH:i:s');
 
   <div class="mb-3">
     <label for="validationText" class="form-label">Event End At</label>
-    <input  type ="datetime-local" class="form-control " id="end_at" placeholder="required Date-Time"  value="{{$endAt}}" name="endAt" required/>
+    <input  type ="datetime-local" class="form-control " id="end_at" placeholder="required Date-Time" name="endAt" required/>
     <div class="invalid-feedback">
       Please Enter Event End DateTime.
     </div>
   </div>
-
+  
   <div class="mb-3">
     <label for="validationText" class="form-label">Event Slug</label>
-    <input  type ="text" class="form-control " id="event_slug" value="{{$event->slug}}" name="slug" placeholder="Slug" />
+    <input  type ="text" class="form-control " id="event_slug" name="slug" placeholder="Slug" />
   </div>
   <div class="mb-3">
     <div class="row">
