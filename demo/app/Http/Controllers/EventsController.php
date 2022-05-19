@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+use App\Mail\EventCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 use DataTables;
 class EventsController extends Controller
 {
@@ -99,6 +101,8 @@ class EventsController extends Controller
         {
             Session::flash('message', 'Event Created Successfully'); 
             Session::flash('alert-class', 'alert-success'); 
+
+            Mail::to(request()->user())->send(new EventCreated($event));
         }
         else{
             Session::flash('message', 'Something Went Wrong'); 
@@ -106,6 +110,7 @@ class EventsController extends Controller
         }
         return redirect('/events/create');
     }
+
 
     /**
      * Display the specified resource.
