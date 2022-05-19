@@ -28,3 +28,5 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/events/{id}','EventsController@show')->name('show.event');
+
+Route::get('/api/exaternal','ExternalAPIsController@externalUsers')->name('external.users');

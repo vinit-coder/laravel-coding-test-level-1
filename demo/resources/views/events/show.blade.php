@@ -6,12 +6,11 @@
     <div class="row ">
             
             <label class="h1 col-10" >Event Details</label> 
-           <a href="{{route('home')}}" class="col-2 center" > <div  role="button" class="button  btn-success text-center">Home</div></a>
+           <a href="{{route('home')}}" class="col-2 center" > <div  role="button" class="button  btn-primary text-center">Home</div></a>
             <hr/>
         </div>
-<form class="was-validated" action="{{route('update.event', $event->id)}}" method="POST"> 
-  @csrf
-  @method('PUT')
+<form class="was-validated" action="" method=""> 
+ 
     @if(isset($event))
     
     <input type="hidden" value="{{$event->id}}" name="id">

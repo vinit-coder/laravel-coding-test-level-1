@@ -80,6 +80,16 @@
                     @if(Session::has('message'))
                         <p class="alert alert-info">{{ Session::get('message') }}</p>
                     @endif
+                    @php
+                    $route = Route::current()->getName();
+                    @endphp
+
+                    
+
+                        <a class="btn btn-primary col-3" href="/api/exaternal">External Users</a>
+                    
+                   
+
                 </div>
             </div>
             @yield('content')

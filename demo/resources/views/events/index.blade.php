@@ -9,7 +9,7 @@
         <div class="row ">
             
             <label class="h1 col-10" >Events List</label> 
-           <a href="{{route('create.event')}}" class="col-2 center" > <div  role="button" class="button  btn-success text-center">Add New Event</div></a>
+           <a href="{{route('create.event')}}" class="col-2 center" > <div  role="button" class="button  btn-primary text-center">Add New Event</div></a>
             <hr/>
         </div>
         
